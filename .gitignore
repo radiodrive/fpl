@@ -1,1 +1,10 @@
+# Example .gitignore content
+*.pyc
+__pycache__/
+# any other rules...
+
+# This line tells Git to ignore all CSV files...
 *.csv
+
+# ... ADD THIS LINE to create an exception for our predictions file.
+!fpl_predictions.csv
