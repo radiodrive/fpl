@@ -4,7 +4,6 @@
 # to select the optimal 15-man squad that maximizes total predicted points
 # while adhering to all FPL rules.
 #
-# Author: Gemini
 # Date: August 1, 2025
 #
 # --- LIBRARIES ---
@@ -20,7 +19,7 @@ def solve_fpl_squad():
     Loads player data and solves for the optimal FPL squad.
     """
     # 1. Load the Data
-    print(f"Loading player predictions from '{PREDICTIONS_FILE}'...")
+    # print(f"Loading player predictions from '{PREDICTIONS_FILE}'...")
     try:
         df = pd.read_csv(PREDICTIONS_FILE)
     except FileNotFoundError:
@@ -29,7 +28,7 @@ def solve_fpl_squad():
         return
 
     # 2. Initialize the Problem
-    print("Setting up the optimization problem...")
+    # print("Setting up the optimization problem...")
     prob = pulp.LpProblem("FPL_Team_Optimization", pulp.LpMaximize)
 
     # 3. Define Decision Variables

@@ -1,0 +1,67 @@
+# A descriptive name for your GitHub Action
+name: FPL Daily Team Generation
+
+# --- TRIGGERS ---
+# This action will run on these events:
+on:
+  # 1. On a schedule (runs automatically)
+  schedule:
+    # This uses cron syntax. '0 6 * * *' means it runs every day at 6:00 AM UTC.
+    # A great time to get fresh data before you wake up.
+    - cron:  '0 6 * * *'
+  
+  # 2. On a push to the main branch (runs when you update code)
+  push:
+    branches:
+      - main
+      - master
+      
+  # 3. Manually (allows you to click a button on GitHub to run it anytime)
+  workflow_dispatch:
+
+# --- JOBS ---
+# Defines the work to be done
+jobs:
+  build-and-run:
+    # Use the latest version of Ubuntu as the operating system for the runner
+    runs-on: ubuntu-latest
+
+    # --- STEPS ---
+    # A sequence of tasks to be executed
+    steps:
+      # 1. Check out your repository's code
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # 2. Set up the Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9' # Specify your Python version
+
+      # 3. Install the required Python libraries
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 4. Run the prediction script to generate the CSV
+      - name: Run FPL Predictor Script
+        run: python3 fpl_play_point_predictor.py
+
+      # 5. Run the optimizer script and save its output to a file
+      - name: Run FPL Optimizer Script
+        run: python3 fpl_optimizer.py > optimized_squad.txt
+
+      # 6. Commit the updated files back to your repository
+      - name: Commit updated data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          # The commit message for the automated commit
+          commit_message: "📊 Automated FPL data update"
+          
+          # The files to be committed.
+          # We want to commit the new predictions and the new squad file.
+          file_pattern: "fpl_predictions.csv optimized_squad.txt"
+          
+          # The user name and email for the commit
+          commit_user_name: "FPL GitHub Action"
+          commit_user_email: "actions@github.com"
