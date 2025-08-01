@@ -39,6 +39,6 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "📊 Automated FPL data update"
-          file_pattern: "fpl_predictions_v1.csv understat_data.csv optimized_squad.txt"
+          file_pattern: "fpl_predictions_v2.csv understat_data.csv optimized_squad.txt"
           commit_user_name: "FPL GitHub Action"
           commit_user_email: "actions@github.com"
