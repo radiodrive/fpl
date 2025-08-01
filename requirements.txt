@@ -3,7 +3,7 @@ requests
 scikit-learn
 pulp
 xgboost
+streamlit
+plotly
 beautifulsoup4
 aiohttp
-streamlit 
-plotly
