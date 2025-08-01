@@ -5,3 +5,5 @@ pulp
 xgboost
 beautifulsoup4
 aiohttp
+streamlit 
+plotly
