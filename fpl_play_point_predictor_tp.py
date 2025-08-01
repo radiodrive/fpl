@@ -85,7 +85,7 @@ def feature_engineering(df):
     past_window = 5
     
     # --- UPDATED LIST OF STATS (REMOVED xA and npxG as they aren't available) ---
-    stats_to_roll = ['total_points', 'goals_scored', 'assists', 'minutes', 
+    stats_to_roll = [ 'goals_scored', 'assists', 'minutes', 
                      'ict_index', 'influence', 'creativity', 'threat',
                      'xG_understat'] # Only xG remains from Understat
                      
@@ -225,7 +225,7 @@ def main():
     final_display = final_display.sort_values(by='predicted_points', ascending=False)
     
     # Save the predictions to a CSV file for the optimizer
-    final_display.to_csv('predictions_v1.csv', index=False)
+    final_display.to_csv('predictions_v2.csv', index=False)
     
     print("\n--- TOP 30 PLAYER PREDICTIONS (Next {} Gameweeks) ---")
     print(final_display.head(30).to_string(index=False))
@@ -233,6 +233,6 @@ def main():
     print("\n--- SCRIPT COMPLETE ---")
     print("Next step: Use these predictions in an optimization script (e.g., with PuLP) to build your squad.")
 
-
+    
 if __name__ == '__main__':
     main()

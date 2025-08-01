@@ -3,3 +3,5 @@ requests
 scikit-learn
 pulp
 xgboost
+beautifulsoup4
+aiohttp
