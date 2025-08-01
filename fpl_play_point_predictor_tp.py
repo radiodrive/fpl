@@ -117,43 +117,29 @@ def main():
     historical_df = load_historical_data(SEASONS)
 
     # ===================================================================
-    # START: BLOCK TO ADD
-    # The new code for loading and merging the xG data goes right here.
+    # Load and merge the xG data
     # ===================================================================
     try:
         print("Loading and merging Understat data...")
         understat_df = pd.read_csv('understat_data.csv')
-        # Understat seasons are e.g. 2022, FPL seasons are 2022-23. We need to align them.
-        # Create a new column for merging that matches the FPL season format.
         understat_df['season_fpl'] = understat_df['season'].apply(lambda x: f"{x}-{str(x+1)[-2:]}")
-        
-        # Merge the two dataframes.
-        # We use a 'left' merge to keep all FPL players, even if they have no Understat data.
         historical_df = pd.merge(historical_df, 
                                  understat_df[['player_name', 'season_fpl', 'xG_understat']], 
                                  how='left', 
                                  left_on=['name', 'season'], 
                                  right_on=['player_name', 'season_fpl'])
-                                 
-        # For players where there was no match, fill the xG data with 0.
         historical_df['xG_understat'].fillna(0, inplace=True)
         print("Successfully merged Understat xG data.")
-
     except FileNotFoundError:
         print("Warning: 'understat_data.csv' not found. xG features will not be used.")
-        # If the file doesn't exist, create an empty 'xG_understat' column so the script doesn't crash.
         historical_df['xG_understat'] = 0
-    # ===================================================================
-    # END: BLOCK TO ADD
     # ===================================================================
 
     # 2. Now we pass the newly merged dataframe to the feature engineering function.
     X_train, y_train, _ = feature_engineering(historical_df.copy())
     
     # 3. The rest of your main() function continues as before...
-    # Train the model
     print("\nTraining the prediction model...")
-    # model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
     model = XGBRegressor(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
     print("Model training complete.")
@@ -162,19 +148,10 @@ def main():
     print("\n--- Model Feature Importance ---")
     importances = model.feature_importances_
     feature_names = X_train.columns
-    
-    # Create a DataFrame for better visualization
-    importance_df = pd.DataFrame({
-        'Feature': feature_names,
-        'Importance': importances
-    }).sort_values(by='Importance', ascending=False)
-    
-    # Calculate as a percentage
+    importance_df = pd.DataFrame({'Feature': feature_names, 'Importance': importances}).sort_values(by='Importance', ascending=False)
     importance_df['Importance'] = importance_df['Importance'] * 100
-    
     print("The model bases its predictions on these features (most important first):")
     print(importance_df.to_string(index=False))
-    # --- END OF NEW SECTION ---
 
     # --- PREPARE DATA FOR LIVE PREDICTION ---
     live_players, live_fixtures, live_teams = get_live_fpl_data()
@@ -183,23 +160,30 @@ def main():
         
     print("\nPreparing live data for prediction...")
     
-    # Get the single latest historical record for each player
     historical_df.sort_values(by=['season', 'GW'], ascending=False, inplace=True)
     latest_historical = historical_df.drop_duplicates(subset=['element'], keep='first')
     
     live_players.rename(columns={'id': 'element'}, inplace=True)
     prediction_df = pd.merge(live_players, latest_historical, on='element', how='left', suffixes=('_live', '_hist'))
 
-    # One-hot encode position
     prediction_df['position'] = prediction_df['element_type'].map({1: 'GK', 2: 'DEF', 3: 'MID', 4: 'FWD'})
     prediction_df = pd.get_dummies(prediction_df, columns=['position'], drop_first=True)
 
-    # Use historical rolling features for prediction
-    past_window = 5
-    # This list must match the one in feature_engineering
-    stats_to_roll = ['total_points', 'goals_scored', 'assists', 'minutes', 'ict_index', 'influence', 'creativity', 'threat']
+    # --- THIS BLOCK IS NOW CORRECTED ---
+    # This list now correctly matches the one in feature_engineering
+    stats_to_roll = ['goals_scored', 'assists', 'minutes', 'ict_index', 
+                     'influence', 'creativity', 'threat', 'xG_understat']
+                     
     for stat in stats_to_roll:
-         prediction_df[f'{stat}_last_{past_window}'] = prediction_df[f'{stat}_hist']
+        # Use a robust way to get the historical stat, checking for the '_hist' suffix first
+        hist_col = f'{stat}_hist'
+        if hist_col in prediction_df.columns:
+            prediction_df[f'{stat}_last_5'] = prediction_df[hist_col]
+        elif stat in prediction_df.columns:
+            prediction_df[f'{stat}_last_5'] = prediction_df[stat]
+        else:
+            prediction_df[f'{stat}_last_5'] = 0
+    # --- END OF CORRECTION ---
     
     prediction_df['value'] = prediction_df['now_cost'] / 10
 
@@ -233,6 +217,5 @@ def main():
     print("\n--- SCRIPT COMPLETE ---")
     print("Next step: Use these predictions in an optimization script (e.g., with PuLP) to build your squad.")
 
-    
 if __name__ == '__main__':
     main()
