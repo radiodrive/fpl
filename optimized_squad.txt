@@ -2,7 +2,7 @@ Welcome to the CBC MILP Solver
 Version: 2.10.3 
 Build Date: Dec 15 2019 
 
-command line - /opt/hostedtoolcache/Python/3.9.23/x64/lib/python3.9/site-packages/pulp/apis/../solverdir/cbc/linux/i64/cbc /tmp/989e550837c845279d328183d634b1b3-pulp.mps -max -timeMode elapsed -branch -printingOptions all -solution /tmp/989e550837c845279d328183d634b1b3-pulp.sol (default strategy 1)
+command line - /opt/hostedtoolcache/Python/3.9.23/x64/lib/python3.9/site-packages/pulp/apis/../solverdir/cbc/linux/i64/cbc /tmp/8393d09d89b1448b8b9e1ff11e13fd49-pulp.mps -max -timeMode elapsed -branch -printingOptions all -solution /tmp/8393d09d89b1448b8b9e1ff11e13fd49-pulp.sol (default strategy 1)
 At line 2 NAME          MODEL
 At line 3 ROWS
 At line 31 COLUMNS
@@ -12,19 +12,19 @@ At line 5420 ENDATA
 Problem MODEL has 26 rows, 670 columns and 2680 elements
 Coin0008I MODEL read with 0 errors
 Option for timeMode changed from cpu to elapsed
-Continuous objective value is 798.635 - 0.00 seconds
-Cgl0003I 0 fixed, 3 tightened bounds, 0 strengthened rows, 0 substitutions
-Cgl0004I processed model has 26 rows, 519 columns (519 integer (459 of which binary)) and 2076 elements
+Continuous objective value is 703.196 - 0.00 seconds
+Cgl0003I 0 fixed, 1 tightened bounds, 0 strengthened rows, 0 substitutions
+Cgl0004I processed model has 26 rows, 541 columns (541 integer (483 of which binary)) and 2164 elements
 Cbc0038I Initial state - 0 integers unsatisfied sum - 0
-Cbc0038I Solution found of -798.635
-Cbc0038I Cleaned solution of -798.635
-Cbc0038I Before mini branch and bound, 519 integers at bound fixed and 0 continuous
+Cbc0038I Solution found of -703.196
+Cbc0038I Cleaned solution of -703.196
+Cbc0038I Before mini branch and bound, 541 integers at bound fixed and 0 continuous
 Cbc0038I Mini branch and bound did not improve solution (0.01 seconds)
-Cbc0038I After 0.01 seconds - Feasibility pump exiting with objective of -798.635 - took 0.00 seconds
-Cbc0012I Integer solution of -798.63523 found by feasibility pump after 0 iterations and 0 nodes (0.01 seconds)
-Cbc0001I Search completed - best objective -798.635235, took 0 iterations and 0 nodes (0.01 seconds)
+Cbc0038I After 0.01 seconds - Feasibility pump exiting with objective of -703.196 - took 0.00 seconds
+Cbc0012I Integer solution of -703.19578 found by feasibility pump after 0 iterations and 0 nodes (0.01 seconds)
+Cbc0001I Search completed - best objective -703.195784, took 0 iterations and 0 nodes (0.01 seconds)
 Cbc0035I Maximum depth 0, 0 variables fixed on reduced cost
-Cuts at root node changed objective from -798.635 to -798.635
+Cuts at root node changed objective from -703.196 to -703.196
 Probing was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Gomory was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
 Knapsack was tried 0 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
@@ -36,7 +36,7 @@ ZeroHalf was tried 0 times and created 0 cuts of which 0 were active after addin
 
 Result - Optimal solution found
 
-Objective value:                798.63523500
+Objective value:                703.19578400
 Enumerated nodes:               0
 Total iterations:               0
 Time (CPU seconds):             0.01
@@ -50,23 +50,23 @@ Solving the problem... (This may take a moment)
 Status: Optimal
 
 --- Optimal FPL Squad Found ---
- web_name           team position  cost  predicted_points
-   Turner  Nott'm Forest       GK   4.0         36.822556
-  Benitez Crystal Palace       GK   4.0         29.963448
-    Tosin        Chelsea      DEF   4.5         84.470856
- Chalobah        Chelsea      DEF   5.0         81.002080
-  Murillo  Nott'm Forest      DEF   5.5         45.142790
-  Kacurri        Arsenal      DEF   4.0         48.177532
- Mosquera        Arsenal      DEF   5.5         44.086124
-   Matete     Sunderland      MID   4.5         62.089100
-    James          Leeds      MID   5.5         56.648052
-     Sima       Brighton      MID   5.5         51.090004
-L.Paquetá       West Ham      MID   6.0         52.718258
-  Savinho       Man City      MID   7.0         55.213135
-    Neave      Newcastle      FWD   4.5         53.146465
- Wheatley        Man Utd      FWD   4.5         56.045090
-    Piroe          Leeds      FWD   5.5         42.019745
+    web_name          team position  cost  predicted_points
+Valdimarsson     Brentford       GK   4.0         31.397290
+      Turner Nott'm Forest       GK   4.0         28.772768
+       Tosin       Chelsea      DEF   4.5         87.922386
+    Chalobah       Chelsea      DEF   5.0         67.479720
+      Ji-soo     Brentford      DEF   4.0         31.245460
+     Kacurri       Arsenal      DEF   4.0         34.234250
+     Murillo Nott'm Forest      DEF   5.5         48.092470
+     Savinho      Man City      MID   7.0         55.873550
+        Sima      Brighton      MID   5.5         42.081955
+   L.Paquetá      West Ham      MID   6.0         38.918420
+       James         Leeds      MID   5.5         54.335327
+      Matete    Sunderland      MID   4.5         46.942078
+       Neave     Newcastle      FWD   4.5         43.255250
+    Wheatley       Man Utd      FWD   4.5         60.413914
+     Amdouni       Burnley      FWD   5.0         32.230946
 
 --- Summary ---
-Total Predicted Points: 798.64
-Total Cost: £75.5m
+Total Predicted Points: 703.20
+Total Cost: £73.5m
