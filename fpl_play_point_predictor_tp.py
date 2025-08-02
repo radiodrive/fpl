@@ -98,7 +98,7 @@ def feature_engineering(df):
     df.fillna(0, inplace=True)
     
     feature_cols = [f'{s}_last_{past_window}' for s in stats_to_roll] + \
-                   ['value', 'position_FWD', 'position_GK', 'position_MID']
+                   ['value', 'opponent_team_difficulty','position_FWD', 'position_GK', 'position_MID']
     
     for col in feature_cols:
         if col not in df.columns:
@@ -159,6 +159,26 @@ def main():
         return
         
     print("\nPreparing live data for prediction...")
+
+     # --- NEW: Calculate average future fixture difficulty ---
+    team_fdr = {}
+    # Find the first gameweek to consider
+    next_gw = live_fixtures[live_fixtures['finished'] == False]['gameweek'].min()
+    for team_id in live_teams['id']:
+        team_fixtures = live_fixtures[
+            ((live_fixtures['team_h'] == team_id) | (live_fixtures['team_a'] == team_id)) &
+            (live_fixtures['gameweek'] >= next_gw)
+        ].head(N_GAMEWEEKS_TO_PREDICT)
+        
+        difficulties = []
+        for _, row in team_fixtures.iterrows():
+            difficulties.append(row['team_h_difficulty'] if row['team_a'] == team_id else row['team_a_difficulty'])
+        
+        team_fdr[team_id] = np.mean(difficulties) if difficulties else 3 # Default to average difficulty
+
+    # Add this FDR to the live player data
+    live_players['avg_fdr_next_5'] = live_players['team'].map(team_fdr)
+    # --- END OF NEW BLOCK ---
     
     historical_df.sort_values(by=['season', 'GW'], ascending=False, inplace=True)
     latest_historical = historical_df.drop_duplicates(subset=['element'], keep='first')
@@ -168,6 +188,9 @@ def main():
 
     prediction_df['position'] = prediction_df['element_type'].map({1: 'GK', 2: 'DEF', 3: 'MID', 4: 'FWD'})
     prediction_df = pd.get_dummies(prediction_df, columns=['position'], drop_first=True)
+
+    # Use the calculated average FPL for the 'opponent_team_difficulty' feature
+    prediction_df['opponent_team_difficulty'] = prediction_df['avg_fdr_next_5']
 
     # --- THIS BLOCK IS NOW CORRECTED ---
     # This list now correctly matches the one in feature_engineering
