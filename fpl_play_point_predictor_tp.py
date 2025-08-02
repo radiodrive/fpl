@@ -192,6 +192,7 @@ def main():
     # Use the calculated average FPL for the 'opponent_team_difficulty' feature
     prediction_df['opponent_team_difficulty'] = prediction_df['avg_fdr_next_5']
 
+
     # --- THIS BLOCK IS NOW CORRECTED ---
     # This list now correctly matches the one in feature_engineering
     stats_to_roll = ['goals_scored', 'assists', 'minutes', 'ict_index', 
