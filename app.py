@@ -1,4 +1,4 @@
-# app.py
+# app.py (v2 - with Force Include functionality)
 #
 # An interactive Streamlit web application to run the FPL prediction and optimization pipeline.
 #
@@ -31,7 +31,6 @@ UNDERSTAT_FILE = 'understat_data.csv'
 PREDICTIONS_FILE = 'fpl_predictions.csv'
 
 # --- Caching Functions ---
-# Use caching to avoid re-downloading data on every app interaction.
 @st.cache_data
 def load_historical_data(seasons):
     all_gws = []
@@ -97,14 +96,16 @@ def train_model(X_train, y_train, algorithm='XGBoost'):
     model.fit(X_train, y_train)
     return model
 
-def solve_fpl_squad(predictions_df, budget=100.0, blacklist=[]):
+# --- UPDATED: solve_fpl_squad now accepts a 'force_include' list ---
+def solve_fpl_squad(predictions_df, budget=100.0, blacklist=[], force_include=[]):
+    # Filter out blacklisted players first
     df = predictions_df[~predictions_df['web_name'].isin(blacklist)].reset_index(drop=True)
 
     prob = pulp.LpProblem("FPL_Team_Optimization", pulp.LpMaximize)
     player_vars = pulp.LpVariable.dicts("Player", df.index, cat='Binary')
     prob += pulp.lpSum([df.loc[i, 'predicted_points'] * player_vars[i] for i in df.index]), "Total Predicted Points"
     prob += pulp.lpSum([df.loc[i, 'cost'] * player_vars[i] for i in df.index]) <= budget, "Total Cost"
-    prob += pulp.lpSum([player_vars[i] for i in df.index]) == 15, "Total Players"
+    prob += pulp.lpSum(player_vars) == 15, "Total Players"
     
     positions = {'GK': 2, 'DEF': 5, 'MID': 5, 'FWD': 3}
     for pos, limit in positions.items():
@@ -114,7 +115,13 @@ def solve_fpl_squad(predictions_df, budget=100.0, blacklist=[]):
     for team_name in teams:
         prob += pulp.lpSum([player_vars[i] for i in df.index if df.loc[i, 'team'] == team_name]) <= 3, f"Max 3 from {team_name}"
 
-    prob.solve(pulp.PULP_CBC_CMD(msg=0)) # Suppress solver messages
+    # --- NEW: Add constraints for players to force include ---
+    for player_name in force_include:
+        player_index = df.index[df['web_name'] == player_name].tolist()
+        if player_index:
+            prob += player_vars[player_index[0]] == 1, f"Force_Include_{player_name}"
+
+    prob.solve(pulp.PULP_CBC_CMD(msg=0))
     
     if pulp.LpStatus[prob.status] == 'Optimal':
         selected_indices = [i for i in df.index if player_vars[i].varValue == 1]
@@ -133,12 +140,10 @@ with st.sidebar:
     st.subheader("1. Data Scraping")
     if st.button("Scrape Latest Understat Data"):
         with st.spinner("Scraping Understat... This may take a few minutes."):
-            # We run the script as a separate process
             process = subprocess.run([f"{sys.executable}", "scrape_understat.py"], capture_output=True, text=True)
             if process.returncode == 0:
                 st.success("Understat data scraped successfully!")
                 st.text_area("Scraper Log", process.stdout, height=200)
-                # Clear cache to force a reload
                 st.cache_data.clear()
             else:
                 st.error("Scraping failed.")
@@ -156,7 +161,7 @@ with col1:
     st.header("📊 Model Predictions")
     if st.button("Train Model & Generate Predictions"):
         with st.spinner("Processing data and training model..."):
-            # Load all data
+            # ... (Data loading and model training logic remains the same) ...
             historical_df = load_historical_data(['2023-24', '2022-23'])
             understat_df = load_understat_data()
             live_players, live_teams = get_live_fpl_data()
@@ -164,7 +169,6 @@ with col1:
             if historical_df.empty or live_players is None:
                 st.error("Could not load necessary FPL data. Aborting.")
             else:
-                # Merge data
                 if understat_df is not None:
                     understat_df['season_fpl'] = understat_df['season'].apply(lambda x: f"{x}-{str(x+1)[-2:]}")
                     historical_df = pd.merge(historical_df, understat_df[['player_name', 'season_fpl', 'xG_understat']], how='left', left_on=['name', 'season'], right_on=['player_name', 'season_fpl'])
@@ -172,11 +176,9 @@ with col1:
                     st.warning("Understat data not found. Running without xG features.")
                     historical_df['xG_understat'] = 0
 
-                # Feature Engineering & Training
                 X_train, y_train = feature_engineering(historical_df.copy(), model_type.lower(), n_gameweeks)
                 model = train_model(X_train, y_train, algorithm)
                 
-                # Prepare live data for prediction
                 historical_df.sort_values(by=['season', 'GW'], ascending=False, inplace=True)
                 latest_historical = historical_df.drop_duplicates(subset=['element'], keep='first')
                 live_players.rename(columns={'id': 'element'}, inplace=True)
@@ -185,35 +187,26 @@ with col1:
                 prediction_df = pd.get_dummies(prediction_df, columns=['position'], drop_first=True)
                 prediction_df['value'] = prediction_df['now_cost'] / 10
                 
-                # --- THIS BLOCK IS CORRECTED TO PREVENT THE KEYERROR ---
-                # Define the base stats the model needs
                 base_feature_stats = ['goals_scored', 'assists', 'minutes', 'ict_index', 'influence', 'creativity', 'threat', 'xG_understat']
                 if model_type.lower() == 'form':
                     base_feature_stats.append('total_points')
 
-                # Prepare the features for the live prediction by checking for suffixed and unsuffixed columns
                 for stat in base_feature_stats:
                     hist_col_name = f'{stat}_hist'
-                    # Check if the suffixed column exists (for standard FPL stats)
                     if hist_col_name in prediction_df.columns:
                         prediction_df[f'{stat}_last_5'] = prediction_df[hist_col_name]
-                    # Fallback to the unsuffixed column (for our merged xG stat)
                     elif stat in prediction_df.columns:
                         prediction_df[f'{stat}_last_5'] = prediction_df[stat]
-                    # If neither exists, create a column of zeros
                     else:
                         prediction_df[f'{stat}_last_5'] = 0
-                # --- END OF CORRECTION ---
 
                 for col in X_train.columns:
                     if col not in prediction_df.columns:
                         prediction_df[col] = 0
                 prediction_df = prediction_df[X_train.columns].fillna(0)
 
-                # Make predictions
                 predictions = model.predict(prediction_df)
                 
-                # Store results in session state
                 results_df = live_players[['web_name', 'team', 'element_type', 'now_cost']].copy()
                 results_df['team'] = results_df['team'].map(live_teams.set_index('id')['name'])
                 results_df['position'] = results_df['element_type'].map({1: 'GK', 2: 'DEF', 3: 'MID', 4: 'FWD'})
@@ -221,7 +214,6 @@ with col1:
                 results_df['predicted_points'] = predictions
                 st.session_state['predictions'] = results_df.sort_values(by='predicted_points', ascending=False)
                 
-                # Store feature importances
                 importance_df = pd.DataFrame({'Feature': X_train.columns, 'Importance': model.feature_importances_}).sort_values(by='Importance', ascending=False)
                 st.session_state['importances'] = importance_df
                 
@@ -250,11 +242,18 @@ st.divider()
 st.header("⭐ Optimized FPL Squad")
 if 'predictions' in st.session_state:
     all_players = st.session_state['predictions']['web_name'].unique().tolist()
-    blacklist = st.multiselect("Select players to EXCLUDE from optimization:", all_players, key="blacklist_select")
+    
+    # --- NEW: UI for Force Include and Blacklist ---
+    include_col, exclude_col = st.columns(2)
+    with include_col:
+        force_include = st.multiselect("Select players to FORCE INCLUDE:", all_players, key="include_select")
+    with exclude_col:
+        blacklist = st.multiselect("Select players to EXCLUDE:", all_players, key="blacklist_select")
     
     if st.button("Optimize Squad", type="primary"):
         with st.spinner("Finding the optimal squad..."):
-            optimized_squad = solve_fpl_squad(st.session_state['predictions'], blacklist=blacklist)
+            # Pass the new list to the solver
+            optimized_squad = solve_fpl_squad(st.session_state['predictions'], blacklist=blacklist, force_include=force_include)
             st.session_state['optimized_squad'] = optimized_squad
 
     if 'optimized_squad' in st.session_state:
@@ -265,13 +264,12 @@ if 'predictions' in st.session_state:
             
             st.subheader(f"Total Predicted Points: {total_points:.2f} | Total Cost: £{total_cost:.1f}m")
             
-            # Sort for display
             pos_order = {'GK': 0, 'DEF': 1, 'MID': 2, 'FWD': 3}
             squad['pos_order'] = squad['position'].map(pos_order)
             squad.sort_values(by='pos_order', inplace=True)
             
             st.dataframe(squad[['web_name', 'team', 'position', 'cost', 'predicted_points']])
         else:
-            st.error("Could not find an optimal solution with the given constraints.")
+            st.error("Could not find an optimal solution. This is often because the 'force include' and 'exclude' lists create an impossible scenario (e.g., too expensive, too many from one team). Please adjust your selections.")
 else:
     st.info("Generate predictions first to enable squad optimization.")

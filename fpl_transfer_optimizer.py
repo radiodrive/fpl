@@ -12,16 +12,33 @@ import pulp
 
 # Enter the exact 'web_name' for each of your 15 players.
 CURRENT_SQUAD_NAMES = [
-    'Areola', 'Turner', 'Alexander-Arnold', 'Saliba', 'Udogie', 'Cash', 'Gusto',
-    'Saka', 'Foden', 'Palmer', 'Eze', 'Garnacho', 'Haaland', 'Watkins', 'Solanke'
+    # Goalkeepers
+    'Petrović',
+    'Kelleher',
+    # Defenders
+    'Collins',
+    'Cucurella',
+    'Aït-Nouri',
+    'Pembele',
+    'Murillo',
+    # Midfielders
+    'Semenyo',
+    'Rogers',
+    'Palmer',
+    'Hudson-Odoi',
+    'Savinho',
+    # Forwards
+    'Welbeck',
+    'João Pedro',
+    'Gyökeres'
 ]
 
 # Enter the amount of money you have in the bank (e.g., 0.5 for £0.5m).
-MONEY_IN_THE_BANK = 0.5
+MONEY_IN_THE_BANK = 4.0
 
 # Enter the number of free transfers you want to make (usually 1 or 2).
 # The script will find the best combination of transfers up to this number.
-NUM_TRANSFERS = 1
+NUM_TRANSFERS = 2
 
 # Set to True if you want to consider taking a -4 hit for an extra transfer.
 # This will only be recommended if the net point gain is positive.
