@@ -225,7 +225,7 @@ def main():
     final_display = final_display.sort_values(by='predicted_points', ascending=False)
     
     # Save the predictions to a CSV file for the optimizer
-    final_display.to_csv('predictions_v1.csv', index=False)
+    final_display.to_csv('fpl_predictions_v1.csv', index=False)
     
     print("\n--- TOP 30 PLAYER PREDICTIONS (Next {} Gameweeks) ---")
     print(final_display.head(30).to_string(index=False))
