@@ -25,7 +25,6 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # --- NEW STEP ADDED HERE ---
       - name: Scrape Understat xG Data
         run: python3 scrape_understat.py
 
@@ -35,6 +34,12 @@ jobs:
       - name: Run FPL Optimizer Script
         run: python3 fpl_optimizer.py > optimized_squad.txt
 
+      - name: Pull latest main branch
+        run: |
+          git config user.name "FPL GitHub Action"
+          git config user.email "actions@github.com"
+          git pull --rebase origin main
+
       - name: Commit updated data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
@@ -42,3 +47,4 @@ jobs:
           file_pattern: "fpl_predictions_v2.csv understat_data.csv optimized_squad.txt"
           commit_user_name: "FPL GitHub Action"
           commit_user_email: "actions@github.com"
+          push_options: '--force-with-lease'

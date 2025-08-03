@@ -28,7 +28,7 @@ st.set_page_config(
 FPL_API_URL = 'https://fantasy.premierleague.com/api/bootstrap-static/'
 DATA_BASE_URL = 'https://raw.githubusercontent.com/vaastav/Fantasy-Premier-League/master/data/{}/gws/merged_gw.csv'
 UNDERSTAT_FILE = 'understat_data.csv'
-PREDICTIONS_FILE = 'fpl_predictions.csv'
+PREDICTIONS_FILE = 'fpl_predictions_v2.csv'
 
 # --- Caching Functions ---
 @st.cache_data
