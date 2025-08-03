@@ -2,11 +2,16 @@ name: FPL Daily Team Generation
 
 on:
   schedule:
+    # Runs every day at 6:00 AM UTC
     - cron:  '0 6 * * *'
+  
+  # Also runs when you push to the main branch
   push:
     branches:
       - main
       - master
+      
+  # Allows you to run it manually from the Actions tab in GitHub
   workflow_dispatch:
 
 jobs:
@@ -25,8 +30,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Scrape Understat xG Data
-        run: python3 scrape_understat.py
+      # --- This step is now disabled to speed up the daily run ---
+      # - name: Scrape Understat xG Data
+      #   run: python3 scrape_understat.py
 
       - name: Run FPL Predictor Script
         run: python3 fpl_play_point_predictor_tp.py
@@ -34,20 +40,13 @@ jobs:
       - name: Run FPL Optimizer Script
         run: python3 fpl_optimizer.py > optimized_squad.txt
 
-      - name: Git Stash and Pull
-        run: |
-          git config user.name "FPL GitHub Action"
-          git config user.email "actions@github.com"
-          git add fpl_predictions_v2.csv understat_data.csv optimized_squad.txt
-          git stash
-          git pull --rebase origin main
-          git stash pop || true
-
       - name: Commit updated data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "📊 Automated FPL data update"
-          file_pattern: "fpl_predictions_v2.csv understat_data.csv optimized_squad.txt"
+          # Define the files to be committed (removed understat_data.csv)
+          file_pattern: "fpl_predictions_v2.csv optimized_squad.txt"
+          # Set the user for the commit
           commit_user_name: "FPL GitHub Action"
           commit_user_email: "actions@github.com"
-          push_options: '--force-with-lease'
+
