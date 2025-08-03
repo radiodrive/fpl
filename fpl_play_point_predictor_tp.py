@@ -3,7 +3,7 @@
 # This script builds a model to predict the total points a player will score
 # over the next N gameweeks, now including fixture difficulty as a feature.
 #
-# Date: August 2, 2025
+# Date: August 3, 2025
 #
 # --- LIBRARIES ---
 import pandas as pd
@@ -14,7 +14,8 @@ from xgboost import XGBRegressor
 
 # --- CONFIGURATION ---
 N_GAMEWEEKS_TO_PREDICT = 4
-SEASONS = ['2024-25', '2023-24', '2022-23', '2025-26']
+# --- CORRECTED: Use stable, complete seasons for training ---
+SEASONS = ['2023-24', '2022-23']
 DATA_BASE_URL = 'https://raw.githubusercontent.com/vaastav/Fantasy-Premier-League/master/data/{}/gws/merged_gw.csv'
 FPL_API_URL = 'https://fantasy.premierleague.com/api/bootstrap-static/'
 
@@ -59,10 +60,8 @@ def feature_engineering(df):
     print("Performing feature engineering...")
     df.sort_values(by=['season', 'name', 'GW'], inplace=True)
     
-    # 1. Create the Target Variable (y)
     df['target_points'] = df.groupby(['name', 'season'])['total_points'].shift(-N_GAMEWEEKS_TO_PREDICT).rolling(window=N_GAMEWEEKS_TO_PREDICT, min_periods=N_GAMEWEEKS_TO_PREDICT).sum()
     
-    # 2. Create Predictor Variables (X)
     past_window = 5
     stats_to_roll = ['goals_scored', 'assists', 'minutes', 'ict_index', 'influence', 'creativity', 'threat', 'xG_understat']
     for stat in stats_to_roll:
@@ -72,7 +71,13 @@ def feature_engineering(df):
     df.dropna(subset=['target_points'], inplace=True)
     df.fillna(0, inplace=True)
     
-    # --- NEW: Add fixture difficulty to the list of features ---
+    # --- THIS BLOCK IS THE KEY FIX ---
+    # Use the correct historical column 'difficulty' and rename it for consistency.
+    if 'difficulty' in df.columns:
+        df['opponent_team_difficulty'] = df['difficulty']
+    else:
+        df['opponent_team_difficulty'] = 3 # Default to average if missing
+        
     feature_cols = [f'{s}_last_{past_window}' for s in stats_to_roll] + \
                    ['value', 'opponent_team_difficulty', 'position_FWD', 'position_GK', 'position_MID']
     
@@ -93,7 +98,6 @@ def main():
         understat_df = pd.read_csv('understat_data.csv')
         understat_df['season_fpl'] = understat_df['season'].apply(lambda x: f"{x}-{str(x+1)[-2:]}")
         historical_df = pd.merge(historical_df, understat_df[['player_name', 'season_fpl', 'xG_understat']], how='left', left_on=['name', 'season'], right_on=['player_name', 'season_fpl'])
-        # Correctly handle fillna to avoid FutureWarning
         historical_df['xG_understat'] = historical_df['xG_understat'].fillna(0)
         print("Successfully merged Understat xG data.")
     except FileNotFoundError:
@@ -114,38 +118,24 @@ def main():
     importance_df['Importance'] = importance_df['Importance'] * 100
     print(importance_df.to_string(index=False))
 
-    # --- PREPARE DATA FOR LIVE PREDICTION ---
     live_players, live_teams, live_fixtures = get_live_fpl_data()
     if live_players is None: return
         
     print("\nPreparing live data for prediction...")
     
-    # --- CORRECTED: Calculate average future fixture difficulty ---
     team_fdr = {}
-    # Find the first gameweek to consider, using the correct column 'event'
     future_fixtures = live_fixtures[live_fixtures['finished'] == False]
     if not future_fixtures.empty and 'event' in future_fixtures.columns:
         next_gw = future_fixtures['event'].min()
         for team_id in live_teams['id']:
-            team_fixtures = live_fixtures[
-                ((live_fixtures['team_h'] == team_id) | (live_fixtures['team_a'] == team_id)) &
-                (live_fixtures['event'] >= next_gw)
-            ].head(N_GAMEWEEKS_TO_PREDICT)
-            
-            difficulties = []
-            for _, row in team_fixtures.iterrows():
-                # The difficulty for the opponent is what matters
-                difficulties.append(row['team_h_difficulty'] if row['team_a'] == team_id else row['team_a_difficulty'])
-            
-            team_fdr[team_id] = np.mean(difficulties) if difficulties else 3 # Default to average difficulty
+            team_fixtures = live_fixtures[((live_fixtures['team_h'] == team_id) | (live_fixtures['team_a'] == team_id)) & (live_fixtures['event'] >= next_gw)].head(N_GAMEWEEKS_TO_PREDICT)
+            difficulties = [row['team_h_difficulty'] if row['team_a'] == team_id else row['team_a_difficulty'] for _, row in team_fixtures.iterrows()]
+            team_fdr[team_id] = np.mean(difficulties) if difficulties else 3
     else:
         print("No future fixtures found. Defaulting FDR to 3 for all teams.")
-        for team_id in live_teams['id']:
-            team_fdr[team_id] = 3
+        for team_id in live_teams['id']: team_fdr[team_id] = 3
 
-    # Add this FDR to the live player data
     live_players['avg_fdr_next_5'] = live_players['team'].map(team_fdr)
-    # --- END OF CORRECTION ---
 
     historical_df.sort_values(by=['season', 'GW'], ascending=False, inplace=True)
     latest_historical = historical_df.drop_duplicates(subset=['element'], keep='first')
@@ -156,7 +146,6 @@ def main():
     prediction_df['position'] = prediction_df['element_type'].map({1: 'GK', 2: 'DEF', 3: 'MID', 4: 'FWD'})
     prediction_df = pd.get_dummies(prediction_df, columns=['position'], drop_first=True)
     
-    # Use the calculated average FPL for the 'opponent_team_difficulty' feature
     prediction_df['opponent_team_difficulty'] = prediction_df['avg_fdr_next_5']
 
     stats_to_roll = ['goals_scored', 'assists', 'minutes', 'ict_index', 'influence', 'creativity', 'threat', 'xG_understat']
@@ -191,7 +180,7 @@ def main():
     
     final_display.to_csv('fpl_predictions_v2.csv', index=False)
     
-    print("\n--- TOP 30 PLAYER PREDICTIONS (Next {} Gameweeks) ---".format(N_GAMEWEEKS_TO_PREDICT))
+    print("\n--- TOP 30 PLAYER PREDICTIONS (Next {} Gameweeks) ---")
     print(final_display.head(30).to_string(index=False))
     
     print("\n--- SCRIPT COMPLETE ---")
