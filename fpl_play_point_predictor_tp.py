@@ -189,7 +189,7 @@ def main():
     final_display = results_df[['web_name', 'team', 'position', 'cost', 'predicted_points']]
     final_display = final_display.sort_values(by='predicted_points', ascending=False)
     
-    final_display.to_csv('fpl_predictions.csv', index=False)
+    final_display.to_csv('fpl_predictions_v2.csv', index=False)
     
     print("\n--- TOP 30 PLAYER PREDICTIONS (Next {} Gameweeks) ---".format(N_GAMEWEEKS_TO_PREDICT))
     print(final_display.head(30).to_string(index=False))
