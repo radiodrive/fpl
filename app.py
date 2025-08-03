@@ -1,4 +1,4 @@
-# app.py (v2 - with Force Include functionality)
+# app.py (v3 - Synchronized with Fixture Difficulty)
 #
 # An interactive Streamlit web application to run the FPL prediction and optimization pipeline.
 #
@@ -53,13 +53,19 @@ def load_understat_data():
 
 @st.cache_data
 def get_live_fpl_data():
-    response = requests.get(FPL_API_URL)
-    if response.status_code != 200:
-        return None, None
-    data = response.json()
-    players_df = pd.DataFrame(data['elements'])
-    teams_df = pd.DataFrame(data['teams'])
-    return players_df, teams_df
+    try:
+        response = requests.get(FPL_API_URL)
+        response.raise_for_status()
+        data = response.json()
+        players_df = pd.DataFrame(data['elements'])
+        teams_df = pd.DataFrame(data['teams'])
+        
+        fixtures_response = requests.get('https://fantasy.premierleague.com/api/fixtures/')
+        fixtures_response.raise_for_status()
+        fixtures_df = pd.DataFrame(fixtures_response.json())
+        return players_df, teams_df, fixtures_df
+    except requests.exceptions.RequestException:
+        return None, None, None
 
 # --- Core Logic Functions (Adapted from your scripts) ---
 def feature_engineering(df, model_type='involvement', n_gameweeks=5):
@@ -78,7 +84,13 @@ def feature_engineering(df, model_type='involvement', n_gameweeks=5):
     df.dropna(subset=['target_points'], inplace=True)
     df.fillna(0, inplace=True)
     
-    feature_cols = [f'{s}_last_{past_window}' for s in stats_to_roll] + ['value', 'position_FWD', 'position_GK', 'position_MID']
+    # --- THIS IS THE KEY FIX: Add fixture difficulty to the training features ---
+    if 'difficulty' in df.columns:
+        df['opponent_team_difficulty'] = df['difficulty']
+    else:
+        df['opponent_team_difficulty'] = 3
+        
+    feature_cols = [f'{s}_last_{past_window}' for s in stats_to_roll] + ['value', 'opponent_team_difficulty', 'position_FWD', 'position_GK', 'position_MID']
     
     for col in feature_cols:
         if col not in df.columns:
@@ -96,7 +108,6 @@ def train_model(X_train, y_train, algorithm='XGBoost'):
     model.fit(X_train, y_train)
     return model
 
-# --- UPDATED: solve_fpl_squad now accepts a 'force_include' list ---
 def solve_fpl_squad(predictions_df, budget=100.0, blacklist=[], force_include=[]):
     # Filter out blacklisted players first
     df = predictions_df[~predictions_df['web_name'].isin(blacklist)].reset_index(drop=True)
@@ -115,7 +126,6 @@ def solve_fpl_squad(predictions_df, budget=100.0, blacklist=[], force_include=[]
     for team_name in teams:
         prob += pulp.lpSum([player_vars[i] for i in df.index if df.loc[i, 'team'] == team_name]) <= 3, f"Max 3 from {team_name}"
 
-    # --- NEW: Add constraints for players to force include ---
     for player_name in force_include:
         player_index = df.index[df['web_name'] == player_name].tolist()
         if player_index:
@@ -152,7 +162,7 @@ with st.sidebar:
     st.subheader("2. Model Configuration")
     model_type = st.selectbox("Select Model Philosophy", ["Involvement", "Form"], help="**Involvement:** A balanced model using all stats. **Form:** A model that heavily prioritizes recent FPL points.")
     algorithm = st.selectbox("Select Algorithm", ["XGBoost", "RandomForest"])
-    n_gameweeks = st.slider("Gameweeks to Predict Ahead", 1, 8, 5)
+    n_gameweeks = st.slider("Gameweeks to Predict Ahead", 1, 8, 4)
 
 # --- Main Page Layout ---
 col1, col2 = st.columns([0.6, 0.4])
@@ -161,17 +171,18 @@ with col1:
     st.header("📊 Model Predictions")
     if st.button("Train Model & Generate Predictions"):
         with st.spinner("Processing data and training model..."):
-            # ... (Data loading and model training logic remains the same) ...
             historical_df = load_historical_data(['2023-24', '2022-23'])
             understat_df = load_understat_data()
-            live_players, live_teams = get_live_fpl_data()
+            live_players, live_teams, live_fixtures = get_live_fpl_data()
 
             if historical_df.empty or live_players is None:
                 st.error("Could not load necessary FPL data. Aborting.")
             else:
                 if understat_df is not None:
                     understat_df['season_fpl'] = understat_df['season'].apply(lambda x: f"{x}-{str(x+1)[-2:]}")
-                    historical_df = pd.merge(historical_df, understat_df[['player_name', 'season_fpl', 'xG_understat']], how='left', left_on=['name', 'season'], right_on=['player_name', 'season_fpl'])
+                    merged_df = pd.merge(historical_df, understat_df[['player_name', 'season_fpl', 'xG_understat']], how='left', left_on=['name', 'season'], right_on=['player_name', 'season_fpl'])
+                    merged_df['xG_understat'] = merged_df['xG_understat'].fillna(0)
+                    historical_df = merged_df
                 else:
                     st.warning("Understat data not found. Running without xG features.")
                     historical_df['xG_understat'] = 0
@@ -179,6 +190,20 @@ with col1:
                 X_train, y_train = feature_engineering(historical_df.copy(), model_type.lower(), n_gameweeks)
                 model = train_model(X_train, y_train, algorithm)
                 
+                # --- THIS BLOCK IS THE KEY FIX: Calculate future fixture difficulty ---
+                team_fdr = {}
+                future_fixtures = live_fixtures[live_fixtures['finished'] == False]
+                if not future_fixtures.empty and 'event' in future_fixtures.columns:
+                    next_gw = future_fixtures['event'].min()
+                    for team_id in live_teams['id']:
+                        team_fixtures = live_fixtures[((live_fixtures['team_h'] == team_id) | (live_fixtures['team_a'] == team_id)) & (live_fixtures['event'] >= next_gw)].head(n_gameweeks)
+                        difficulties = [row['team_h_difficulty'] if row['team_a'] == team_id else row['team_a_difficulty'] for _, row in team_fixtures.iterrows()]
+                        team_fdr[team_id] = np.mean(difficulties) if difficulties else 3
+                else:
+                    for team_id in live_teams['id']: team_fdr[team_id] = 3
+                live_players['avg_fdr'] = live_players['team'].map(team_fdr)
+                # --- END OF FIX ---
+
                 historical_df.sort_values(by=['season', 'GW'], ascending=False, inplace=True)
                 latest_historical = historical_df.drop_duplicates(subset=['element'], keep='first')
                 live_players.rename(columns={'id': 'element'}, inplace=True)
@@ -186,6 +211,7 @@ with col1:
                 prediction_df['position'] = prediction_df['element_type'].map({1: 'GK', 2: 'DEF', 3: 'MID', 4: 'FWD'})
                 prediction_df = pd.get_dummies(prediction_df, columns=['position'], drop_first=True)
                 prediction_df['value'] = prediction_df['now_cost'] / 10
+                prediction_df['opponent_team_difficulty'] = prediction_df['avg_fdr']
                 
                 base_feature_stats = ['goals_scored', 'assists', 'minutes', 'ict_index', 'influence', 'creativity', 'threat', 'xG_understat']
                 if model_type.lower() == 'form':
@@ -243,7 +269,6 @@ st.header("⭐ Optimized FPL Squad")
 if 'predictions' in st.session_state:
     all_players = st.session_state['predictions']['web_name'].unique().tolist()
     
-    # --- NEW: UI for Force Include and Blacklist ---
     include_col, exclude_col = st.columns(2)
     with include_col:
         force_include = st.multiselect("Select players to FORCE INCLUDE:", all_players, key="include_select")
@@ -252,7 +277,6 @@ if 'predictions' in st.session_state:
     
     if st.button("Optimize Squad", type="primary"):
         with st.spinner("Finding the optimal squad..."):
-            # Pass the new list to the solver
             optimized_squad = solve_fpl_squad(st.session_state['predictions'], blacklist=blacklist, force_include=force_include)
             st.session_state['optimized_squad'] = optimized_squad
 
