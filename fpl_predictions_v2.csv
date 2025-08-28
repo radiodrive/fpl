@@ -7,7 +7,7 @@ James,Leeds,MID,5.5,54.335327
 Murillo,Nott'm Forest,DEF,5.5,48.09247
 Matete,Sunderland,MID,4.5,46.942078
 Neave,Newcastle,FWD,4.5,43.25525
-Sima,Brighton,MID,5.5,42.081955
+Sima,Brighton,MID,5.4,42.081955
 L.Paquetá,West Ham,MID,5.9,38.91842
 Iroegbunam,Everton,MID,5.0,38.899242
 Kacurri,Arsenal,DEF,4.0,34.23425
@@ -23,7 +23,7 @@ Mosquera,Arsenal,DEF,5.4,30.659466
 Garner,Everton,MID,5.0,30.222342
 Turner,Nott'm Forest,GK,4.0,28.772768
 Tsimikas,Liverpool,DEF,4.9,28.754337
-Piroe,Leeds,FWD,5.5,28.037231
+Piroe,Leeds,FWD,5.4,28.037231
 Benitez,Crystal Palace,GK,4.0,27.289335
 Keane,Everton,DEF,4.5,26.938595
 Gomez,Liverpool,DEF,5.0,26.276636
@@ -49,7 +49,7 @@ Umeh,Crystal Palace,MID,4.5,14.892556
 Andrey Santos,Chelsea,MID,4.5,14.728455
 Heath,Everton,MID,4.5,14.412895
 Wirtz,Liverpool,MID,8.4,14.128272
-Zinchenko,Arsenal,DEF,5.0,14.067033
+Zinchenko,Arsenal,DEF,4.9,14.067033
 Cunha,Man Utd,MID,8.1,13.954735
 Zubimendi,Arsenal,MID,5.5,13.637579
 Stach,Leeds,MID,5.0,13.575946
@@ -142,7 +142,7 @@ Bernardo,Man City,MID,6.5,6.8201385
 Doucouré,Crystal Palace,MID,5.0,6.816364
 Ozoh,Crystal Palace,MID,4.5,6.799747
 Woodman,Liverpool,GK,4.0,6.6881895
-Fábio Silva,Wolves,FWD,5.0,6.613212
+Fábio Silva,Wolves,FWD,4.9,6.613212
 Ugochukwu,Burnley,MID,5.0,6.589311
 Sánchez,Chelsea,GK,5.0,6.5344777
 Gillespie,Newcastle,GK,4.0,6.448688
@@ -198,7 +198,7 @@ D.Essugo,Chelsea,MID,4.5,4.6582675
 Olusesi,Spurs,MID,4.5,4.630765
 Foster,Burnley,FWD,5.0,4.6101475
 Clyne,Crystal Palace,DEF,4.0,4.5989375
-Bryan,Spurs,MID,5.0,4.5816727
+Bryan,Spurs,MID,4.9,4.5816727
 F.Kadıoğlu,Brighton,DEF,4.4,4.5544047
 Cashin,Brighton,DEF,4.0,4.5396686
 Hume,Sunderland,DEF,4.5,4.5305014
@@ -361,7 +361,7 @@ Strand Larsen,Wolves,FWD,6.5,3.496716
 Fraser,Wolves,FWD,4.5,3.496716
 Füllkrug,West Ham,FWD,5.9,3.496716
 Thiago,Brentford,FWD,6.0,3.496716
-Zirkzee,Man Utd,FWD,6.0,3.496716
+Zirkzee,Man Utd,FWD,5.9,3.496716
 Wilson,West Ham,FWD,5.9,3.496716
 Mayenda,Sunderland,FWD,5.5,3.496716
 N.Jackson,Chelsea,FWD,6.5,3.496716
@@ -388,7 +388,7 @@ Johnson,Spurs,MID,7.1,3.41741
 Ndiaye,Everton,MID,6.5,3.41741
 Guessand,Aston Villa,MID,6.5,3.41741
 Bates,Everton,MID,4.5,3.41741
-Alcaraz,Everton,MID,5.5,3.41741
+Alcaraz,Everton,MID,5.4,3.41741
 Gana,Everton,MID,5.5,3.41741
 Gray,Spurs,MID,5.0,3.41741
 Solomon,Spurs,MID,5.4,3.41741
@@ -413,7 +413,7 @@ Browne,Sunderland,MID,4.5,3.41741
 Tchaouna,Burnley,MID,5.0,3.41741
 McConnell,Liverpool,MID,4.5,3.41741
 Tavernier,Bournemouth,MID,5.5,3.41741
-Aleksić,Sunderland,MID,5.0,3.41741
+Aleksić,Sunderland,MID,4.9,3.41741
 Adingra,Sunderland,MID,5.5,3.41741
 E.Le Fée,Sunderland,MID,4.9,3.41741
 Luis Díaz,Liverpool,MID,8.0,3.41741
@@ -437,7 +437,7 @@ Okafor,Leeds,MID,5.5,3.41741
 J.Rak-Sakyi,Crystal Palace,MID,4.5,3.41741
 Lerma,Crystal Palace,MID,5.0,3.41741
 Wharton,Crystal Palace,MID,5.0,3.41741
-Esse,Crystal Palace,MID,5.0,3.41741
+Esse,Crystal Palace,MID,4.9,3.41741
 Ba,Sunderland,MID,4.5,3.41741
 Talbi,Sunderland,MID,5.0,3.41741
 Ekwah,Sunderland,MID,4.5,3.41741
@@ -475,7 +475,7 @@ Carvalho,Brentford,MID,5.0,3.41741
 Nunes,Brentford,MID,5.0,3.41741
 Marmoush,Man City,MID,8.4,3.41741
 White,Newcastle,MID,4.5,3.41741
-Ugarte,Man Utd,MID,5.0,3.41741
+Ugarte,Man Utd,MID,4.9,3.41741
 Collyer,Man Utd,MID,4.5,3.41741
 Gruda,Brighton,MID,5.4,3.41741
 O'Riley,Brighton,MID,5.5,3.41741
@@ -533,7 +533,7 @@ Lankshear,Spurs,FWD,4.5,2.9390736
 Diarra,Sunderland,MID,5.5,2.9283926
 Estêvão,Chelsea,MID,6.5,2.8757558
 João Pedro,Chelsea,FWD,7.6,2.840891
-Mundle,Sunderland,MID,5.0,2.8233657
+Mundle,Sunderland,MID,4.9,2.8233657
 Enes Ünal,Bournemouth,FWD,5.5,2.8205152
 Cirkin,Sunderland,DEF,4.0,2.8155534
 Gannon-Doak,Bournemouth,MID,5.0,2.8088298
@@ -609,7 +609,7 @@ Ebiowei,Crystal Palace,MID,4.5,0.39394516
 Tel,Spurs,MID,6.4,0.39394516
 Edwards,Burnley,MID,4.9,0.39394516
 Janelt,Brentford,MID,4.9,0.39394516
-Longstaff,Leeds,MID,5.0,0.39394516
+Longstaff,Leeds,MID,4.9,0.39394516
 Onyeka,Brentford,MID,5.0,0.39394516
 Yalcouye,Brighton,MID,5.0,0.39394516
 Bruno G.,Newcastle,MID,6.5,0.39394516
@@ -619,7 +619,7 @@ J.Ramsey,Newcastle,MID,5.5,0.39394516
 Baleba,Brighton,MID,5.0,0.39394516
 Echeverri,Man City,MID,5.4,0.39394516
 Bamford,Leeds,FWD,4.9,0.388489
-Beto,Everton,FWD,5.5,0.388489
+Beto,Everton,FWD,5.4,0.388489
 P.M.Sarr,Spurs,MID,5.0,0.3775054
 Armstrong,Everton,MID,4.5,0.3775054
 Delcroix,Burnley,DEF,4.0,0.36582756
@@ -686,7 +686,7 @@ Xhaka,Sunderland,MID,5.0,0.1268157
 Abdullahi,Sunderland,FWD,4.5,0.11133194
 Barkley,Aston Villa,MID,4.9,0.09430772
 Scott,Bournemouth,MID,5.0,0.09430772
-Nkunku,Chelsea,MID,6.0,0.09430772
+Nkunku,Chelsea,MID,5.9,0.09430772
 Onana,Aston Villa,MID,5.0,0.09430772
 Willock,Newcastle,MID,5.0,0.09430772
 Joelinton,Newcastle,MID,6.0,0.09430772
