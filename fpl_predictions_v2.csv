@@ -138,7 +138,7 @@ Endo,Liverpool,MID,5.0,7.199268
 Vicario,Spurs,GK,5.0,7.0321884
 Adams,Bournemouth,MID,5.0,6.9250226
 Leno,Fulham,GK,5.0,6.87423
-Bernardo,Man City,MID,6.5,6.8201385
+Bernardo,Man City,MID,6.4,6.8201385
 Doucouré,Crystal Palace,MID,5.0,6.816364
 Ozoh,Crystal Palace,MID,4.5,6.799747
 Woodman,Liverpool,GK,4.0,6.6881895
@@ -156,12 +156,12 @@ M.Bizot,Aston Villa,GK,4.5,5.942883
 Kporha,Crystal Palace,DEF,4.0,5.9400563
 Kerkez,Liverpool,DEF,6.0,5.8946795
 Pembele,Sunderland,DEF,4.0,5.891919
-D.Leon,Man Utd,DEF,4.5,5.7941055
+D.Leon,Man Utd,DEF,4.4,5.7941055
 Mavropanos,West Ham,DEF,4.4,5.774525
 Neto,Bournemouth,GK,4.5,5.7650466
 Jörgensen,Chelsea,GK,4.5,5.755319
 Proctor,Aston Villa,GK,4.0,5.6845937
-Milambo,Brentford,MID,5.5,5.645211
+Milambo,Brentford,MID,5.4,5.645211
 Scarlett,Spurs,FWD,4.5,5.6045327
 Cullen,Burnley,MID,5.0,5.5936413
 Antoñito C.,Newcastle,MID,5.0,5.494324
@@ -216,7 +216,7 @@ Roerslev,Brentford,DEF,4.5,4.2968564
 Bruun Larsen,Burnley,MID,5.5,4.26067
 Welbeck,Brighton,FWD,6.4,4.239978
 Johnson,Sunderland,DEF,4.0,4.197471
-Lamptey,Brighton,DEF,4.5,4.1946344
+Lamptey,Brighton,DEF,4.4,4.1946344
 Churlinov,Burnley,MID,5.0,4.192945
 Ortega Moreno,Man City,GK,4.9,4.1098065
 McGill,Brighton,GK,4.0,4.0809407
@@ -307,14 +307,14 @@ Cucurella,Chelsea,DEF,6.1,3.6004314
 Colwill,Chelsea,DEF,4.9,3.6004314
 Fofana,Chelsea,DEF,4.5,3.6004314
 Rúben,Man City,DEF,5.5,3.6004314
-Robertson,Liverpool,DEF,6.0,3.6004314
+Robertson,Liverpool,DEF,5.9,3.6004314
 Konaté,Liverpool,DEF,5.5,3.6004314
 Bradley,Liverpool,DEF,5.0,3.6004314
 Hato,Chelsea,DEF,4.9,3.6004314
 Ramsay,Liverpool,DEF,4.0,3.6004314
 Akanji,Man City,DEF,5.4,3.6004314
 Davies,Spurs,DEF,4.5,3.6004314
-Pedro Porro,Spurs,DEF,5.5,3.6004314
+Pedro Porro,Spurs,DEF,5.6,3.6004314
 Leoni,Liverpool,DEF,5.0,3.6004314
 Frimpong,Liverpool,DEF,5.9,3.6004314
 Coleman,Everton,DEF,4.5,3.6004314
@@ -330,7 +330,7 @@ Patterson,Everton,DEF,4.5,3.6004314
 Emerson,West Ham,DEF,4.4,3.6004314
 Walker-Peters,West Ham,DEF,4.5,3.6004314
 Welch,Everton,DEF,4.0,3.6004314
-Maatsen,Aston Villa,DEF,4.5,3.6004314
+Maatsen,Aston Villa,DEF,4.4,3.6004314
 Gudmundsson,Leeds,DEF,4.0,3.6004314
 Rodon,Leeds,DEF,4.0,3.6004314
 Cash,Aston Villa,DEF,4.5,3.6004314
@@ -348,14 +348,14 @@ Muniz,Fulham,FWD,5.5,3.496716
 Raúl,Fulham,FWD,6.4,3.496716
 Nketiah,Crystal Palace,FWD,5.4,3.496716
 Broja,Burnley,FWD,5.5,3.496716
-Kostoulas,Brighton,FWD,5.0,3.496716
+Kostoulas,Brighton,FWD,4.9,3.496716
 Adu-Adjei,Bournemouth,FWD,4.5,3.496716
 Ferguson,Brighton,FWD,5.5,3.496716
 Wood,Nott'm Forest,FWD,7.7,3.496716
 Šeško,Man Utd,FWD,7.5,3.496716
 Morgan,Brentford,FWD,4.5,3.496716
 Tzimas,Brighton,FWD,5.4,3.496716
-Kalajdžić,Wolves,FWD,5.0,3.496716
+Kalajdžić,Wolves,FWD,4.9,3.496716
 Havertz,Arsenal,FWD,7.4,3.496716
 Strand Larsen,Wolves,FWD,6.5,3.496716
 Fraser,Wolves,FWD,4.5,3.496716
@@ -397,7 +397,7 @@ Burrowes,Aston Villa,MID,4.5,3.41741
 Harrison,Leeds,MID,5.4,3.41741
 Godo,Fulham,MID,4.5,3.41741
 Andreas,Fulham,MID,5.4,3.41741
-Cairney,Fulham,MID,5.0,3.41741
+Cairney,Fulham,MID,4.9,3.41741
 Lukić,Fulham,MID,5.0,3.41741
 Reed,Fulham,MID,4.5,3.41741
 J.Palhinha,Spurs,MID,5.5,3.41741
@@ -408,7 +408,7 @@ Eze,Arsenal,MID,7.5,3.41741
 Dendoncker,Aston Villa,MID,4.5,3.41741
 Dobbin,Aston Villa,MID,5.0,3.41741
 McGinn,Aston Villa,MID,5.5,3.41741
-Neil,Sunderland,MID,5.0,3.41741
+Neil,Sunderland,MID,4.9,3.41741
 Browne,Sunderland,MID,4.5,3.41741
 Tchaouna,Burnley,MID,5.0,3.41741
 McConnell,Liverpool,MID,4.5,3.41741
@@ -506,7 +506,7 @@ Guedes,Wolves,MID,5.5,3.41741
 Gomes,Wolves,MID,5.5,3.41741
 Madueke,Arsenal,MID,7.0,3.41741
 Ødegaard,Arsenal,MID,8.0,3.41741
-Saka,Arsenal,MID,10.0,3.41741
+Saka,Arsenal,MID,9.9,3.41741
 Rees-Dottin,Bournemouth,MID,4.5,3.3745813
 James,Chelsea,DEF,5.5,3.3408802
 Trossard,Arsenal,MID,6.9,3.2933245
@@ -646,7 +646,7 @@ Huggins,Sunderland,DEF,4.0,0.2656076
 Gordon,Newcastle,MID,7.5,0.2595649
 Akinmboni,Bournemouth,DEF,4.0,0.2550286
 Aké,Man City,DEF,5.5,0.2550286
-Pinnock,Brentford,DEF,4.5,0.2550286
+Pinnock,Brentford,DEF,4.4,0.2550286
 Vitor Reis,Man City,DEF,5.0,0.2550286
 Lascelles,Newcastle,DEF,4.5,0.2550286
 Henry,Brentford,DEF,4.5,0.2550286
@@ -661,7 +661,7 @@ Andersen,Fulham,DEF,4.5,0.21504769
 Reinildo,Sunderland,DEF,4.0,0.21504769
 Kilman,West Ham,DEF,4.4,0.21504769
 O.Richards,Nott'm Forest,DEF,4.5,0.21504769
-Martinelli,Arsenal,MID,7.0,0.20650588
+Martinelli,Arsenal,MID,6.9,0.20650588
 Winterburn,Bournemouth,MID,4.5,0.20650588
 Hutchinson,Nott'm Forest,MID,5.5,0.20650588
 Anthony,Burnley,MID,5.5,0.17819194
