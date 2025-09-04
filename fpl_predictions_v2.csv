@@ -35,7 +35,7 @@ Marshall,West Ham,FWD,4.4,22.780527
 Seung soo,Newcastle,MID,4.5,22.55762
 Jensen,Brentford,MID,4.9,22.326357
 Nmecha,Leeds,FWD,5.0,20.393475
-Branthwaite,Everton,DEF,5.4,19.593208
+Branthwaite,Everton,DEF,5.3,19.593208
 Neto,Chelsea,MID,7.0,19.053278
 Dixon,Everton,DEF,4.0,18.520367
 J.Cuenca,Fulham,DEF,4.5,18.28459
@@ -152,7 +152,7 @@ Spence,Spurs,DEF,4.5,6.434207
 Estève,Burnley,DEF,4.0,6.4251504
 Nichols,Arsenal,DEF,4.0,6.31021
 Jordan,Burnley,DEF,4.0,6.2915835
-Tielemans,Aston Villa,MID,6.0,6.1096125
+Tielemans,Aston Villa,MID,5.9,6.1096125
 Bettinelli,Man City,GK,4.0,6.0045233
 A.Jimenez,Bournemouth,DEF,4.5,5.95666
 M.Bizot,Aston Villa,GK,4.5,5.942883
@@ -248,7 +248,7 @@ Johnstone,Wolves,GK,4.5,3.872629
 Gunn,Nott'm Forest,GK,4.0,3.872629
 Digne,Aston Villa,DEF,4.5,3.8718524
 Weiss,Burnley,GK,4.5,3.8326478
-Onana,Man Utd,GK,5.0,3.8326478
+Onana,Man Utd,GK,4.9,3.8326478
 Gyabi,Leeds,MID,4.5,3.7887743
 Édouard,Crystal Palace,FWD,5.0,3.7724857
 Højlund,Man Utd,FWD,6.3,3.7678702
@@ -386,7 +386,7 @@ Raúl,Fulham,FWD,6.4,3.496716
 Havertz,Arsenal,FWD,7.4,3.496716
 Füllkrug,West Ham,FWD,5.9,3.496716
 Zirkzee,Man Utd,FWD,5.9,3.496716
-Strand Larsen,Wolves,FWD,6.5,3.496716
+Strand Larsen,Wolves,FWD,6.4,3.496716
 Šeško,Man Utd,FWD,7.4,3.496716
 Wilson,West Ham,FWD,5.9,3.496716
 Evanilson,Bournemouth,FWD,7.0,3.496716
@@ -458,7 +458,7 @@ M.Salah,Liverpool,MID,14.5,3.41741
 Esse,Crystal Palace,MID,4.9,3.41741
 Gakpo,Liverpool,MID,7.7,3.41741
 Christie,Bournemouth,MID,5.0,3.41741
-Cook,Bournemouth,MID,5.0,3.41741
+Cook,Bournemouth,MID,4.9,3.41741
 Tavernier,Bournemouth,MID,5.5,3.41741
 Szoboszlai,Liverpool,MID,6.5,3.41741
 Bakwa,Nott'm Forest,MID,6.0,3.41741
@@ -530,7 +530,7 @@ Harriman-Annous,Arsenal,MID,4.5,3.41741
 L.Guilherme,West Ham,MID,4.9,3.41741
 Kabia,Arsenal,MID,4.5,3.41741
 S.Magassa,West Ham,MID,5.0,3.41741
-Potts,West Ham,MID,4.5,3.41741
+Potts,West Ham,MID,4.4,3.41741
 Madueke,Arsenal,MID,7.0,3.41741
 Hodge,Wolves,MID,4.5,3.41741
 Rees-Dottin,Bournemouth,MID,4.5,3.3745813
@@ -671,7 +671,7 @@ Faivre,Bournemouth,MID,4.5,0.27673832
 Maghoma,Brentford,MID,4.5,0.27673832
 Phillips,Man City,MID,4.9,0.27673832
 Huggins,Sunderland,DEF,4.0,0.2656076
-Gordon,Newcastle,MID,7.5,0.2595649
+Gordon,Newcastle,MID,7.4,0.2595649
 Pinnock,Brentford,DEF,4.4,0.2550286
 Vitor Reis,Man City,DEF,5.0,0.2550286
 Aké,Man City,DEF,5.5,0.2550286
@@ -694,7 +694,7 @@ Hutchinson,Nott'm Forest,MID,5.5,0.20650588
 Martinelli,Arsenal,MID,6.9,0.20650588
 Winterburn,Bournemouth,MID,4.5,0.20650588
 Anthony,Burnley,MID,5.5,0.17819194
-Tanaka,Leeds,MID,5.0,0.17819194
+Tanaka,Leeds,MID,4.9,0.17819194
 Awoniyi,Nott'm Forest,FWD,5.4,0.1634209
 Osula,Newcastle,FWD,5.5,0.1634209
 Mateo Joseph,Leeds,FWD,5.0,0.15131296
