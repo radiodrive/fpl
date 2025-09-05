@@ -214,7 +214,7 @@ Gabriel,Arsenal,DEF,6.1,4.4370255
 Cardines,Crystal Palace,MID,4.5,4.4351525
 John,Nott'm Forest,GK,4.0,4.4113717
 Nna Noukeu,Sunderland,GK,4.0,4.3875356
-Delap,Chelsea,FWD,6.4,4.3601713
+Delap,Chelsea,FWD,6.3,4.3601713
 Souček,West Ham,MID,5.8,4.340572
 Aaronson,Leeds,MID,5.4,4.3219285
 Roerslev,Brentford,DEF,4.5,4.2968564
@@ -292,7 +292,7 @@ Toti,Wolves,DEF,4.5,3.6004314
 Hickey,Brentford,DEF,4.0,3.6004314
 Thiaw,Newcastle,DEF,5.0,3.6004314
 Holding,Crystal Palace,DEF,4.0,3.6004314
-Ramsay,Liverpool,DEF,4.0,3.6004314
+Ramsay,Liverpool,DEF,3.9,3.6004314
 Krafth,Newcastle,DEF,4.5,3.6004314
 Trippier,Newcastle,DEF,5.0,3.6004314
 Meghoma,Brentford,DEF,4.0,3.6004314
@@ -384,7 +384,7 @@ Morgan,Brentford,FWD,4.4,3.496716
 Kalajdžić,Wolves,FWD,4.9,3.496716
 Raúl,Fulham,FWD,6.4,3.496716
 Havertz,Arsenal,FWD,7.4,3.496716
-Füllkrug,West Ham,FWD,5.9,3.496716
+Füllkrug,West Ham,FWD,5.8,3.496716
 Zirkzee,Man Utd,FWD,5.9,3.496716
 Strand Larsen,Wolves,FWD,6.4,3.496716
 Šeško,Man Utd,FWD,7.4,3.496716
@@ -497,7 +497,7 @@ Henderson,Brentford,MID,5.0,3.41741
 Carvalho,Brentford,MID,4.9,3.41741
 Enzo,Chelsea,MID,6.6,3.41741
 Nunes,Brentford,MID,4.9,3.41741
-Konak,Brentford,MID,4.5,3.41741
+Konak,Brentford,MID,4.4,3.41741
 Palmer,Chelsea,MID,10.4,3.41741
 J.Palhinha,Spurs,MID,5.5,3.41741
 Xavi,Spurs,MID,7.0,3.41741
@@ -588,7 +588,7 @@ Mateta,Crystal Palace,FWD,7.5,1.9102846
 A.Ramsey,Burnley,MID,4.4,1.8578598
 Dowman,Arsenal,MID,4.5,1.5770874
 Peart-Harris,Brentford,MID,4.5,1.4534996
-Hinshelwood,Brighton,MID,5.4,1.3911803
+Hinshelwood,Brighton,MID,5.3,1.3911803
 Hee Chan,Wolves,MID,5.9,1.3653592
 Yasin,Aston Villa,DEF,4.0,1.2765193
 Heaven,Man Utd,DEF,4.0,1.2552443
