@@ -1,9 +1,5 @@
 name: FPL Daily Team Generation
 
-on:
-  schedule:
-    # Runs every day at 6:00 AM UTC
-    - cron:  '0 6 * * *'
   
   # Also runs when you push to the main branch
   push:
